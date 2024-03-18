@@ -1,1 +1,3 @@
-# pentago
+# Pentago
+
+Pls read other documentation.
