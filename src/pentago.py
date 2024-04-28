@@ -1,6 +1,6 @@
 from board import *
 from algo import *
-from random import randint, choice
+from random import randint
 
 def your_turn():
     # Your turn
@@ -11,7 +11,7 @@ def your_turn():
 
     return [row, col, quadrant, direction]
 
-if __name__ == "__main__":
+def play():
     board = PentagoBoard()
     current_player = randint(1, 2)
 
