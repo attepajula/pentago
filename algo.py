@@ -2,18 +2,19 @@ from board import PentagoBoard
 from math import inf
 
 def minimax(board, depth, maximizingPlayer):
+    return 0
     if depth == 0 or board.is_terminal:
         return evaluate(board)
 
     if maximizingPlayer:
         maxEval = -inf
-        for move in board.generate_legal_moves():
+        for move in generate_legal_moves(board):
             eva = minimax(move, depth - 1, False)
             maxEval = max(maxEval, eva)
         return maxEval
     else:
         minEval = inf
-        for move in board.generate_legal_moves():
+        for move in generate_legal_moves(board):
             eva = minimax(move, depth - 1, True)
             minEval = min(minEval, eva)
         return minEval
