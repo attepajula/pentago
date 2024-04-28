@@ -10,32 +10,39 @@ class PentagoBoard:
         print()
 
     def make_move(self, row, col, quadrant, player, direction): 
+        if not (0 <= row < 6 and 0 <= col < 6 and 0 <= quadrant <= 3):
+            print("Invalid input!")
+            return False
+        if direction.lower() not in ["cw", "ccw"]:
+            print("Invalid input!")
+            return False
         if self.state[row][col] == "_":
             self.state[row][col] = "O" if player == 1 else "X"
         else:
             print("Position occupied!")
-            return
+            return False
         if 0 <= quadrant < 4:
             if direction == "CW":
-                self.rotate_clockwise(quadrant)
+                self.rotate(quadrant, counterclockwise=False)
             elif direction == "CCW":
-                self.rotate_counterclockwise(quadrant)
+                self.rotate(quadrant, counterclockwise=True)
+        return True
 
-    def rotate_clockwise(self, quadrant):
+    def rotate(self, quadrant, counterclockwise: bool):
         row_start = (quadrant // 2) * 3
         col_start = (quadrant % 2) * 3
-        rotated_segment = [list(row) for row in zip(*self.state[row_start:row_start + 3][::-1])]
+
+        rotated_segment = [[None] * 3 for _ in range(3)]
+        for i in range(3):
+            for j in range(3):
+                if not counterclockwise:
+                    rotated_segment[i][j] = self.state[row_start + (2 - j)][col_start + i]
+                else:
+                    rotated_segment[i][j] = self.state[row_start + j][col_start + (2 - i)]
+
         for i in range(3):
             for j in range(3):
                 self.state[row_start + i][col_start + j] = rotated_segment[i][j]
-
-    def rotate_counterclockwise(self, quadrant):
-        row_start = (quadrant // 2) * 3
-        col_start = (quadrant % 2) * 3
-        rotated_segment = [list(row) for row in zip(*self.state[row_start:row_start + 3])]
-        for i in range(3):
-            for j in range(3):
-                self.state[row_start + i][col_start + j] = rotated_segment[j][i]
 
     def copy(self):
         new_board = PentagoBoard()

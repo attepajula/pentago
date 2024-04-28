@@ -2,6 +2,14 @@ from board import *
 from algo import *
 from random import randint, choice
 
+def your_turn():
+    # Your turn
+    row = int(input("Choose row (1-6): ")) - 1
+    col = int(input("Choose column (1-6): ")) - 1
+    quadrant = int(input("Choose quarter (1-4): ")) - 1
+    direction = input("Choose direction (CW or CCW): ").upper()
+
+    return [row, col, quadrant, direction]
 
 if __name__ == "__main__":
     board = PentagoBoard()
@@ -16,15 +24,13 @@ if __name__ == "__main__":
             print(f"Current player {current_player}")
             print("Your turn:")
 
-            # Your turn
-            row = int(input("Choose row (1-6): ")) - 1
-            col = int(input("Choose column (1-6): ")) - 1
-            quadrant = int(input("Choose quarter (1-4): ")) - 1
-            direction = input("Choose direction (CW or CCW): ").upper()
-            
-            # Execute
-            # Example: board.make_move(row, col, quadrant, direction, current_player)
-            board.make_move(row, col, quadrant, current_player, direction)
+            while True:
+                # Your turn
+                moves = your_turn()
+                # Execute
+                # Example: board.make_move(row, col, quadrant, current_player, direction)
+                if board.make_move(moves[0], moves[1], moves[2], current_player, moves[3]):
+                    break
 
         if current_player == 2:
             print(f"Current player {current_player}")
