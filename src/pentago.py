@@ -27,21 +27,23 @@ def play():
             
             while True:
                 # Your turn
-                moves = your_turn()
-                # Execute
-                # Example: board.make_move(row, col, quadrant, current_player, direction)
-                if board.make_move(moves[0], moves[1], moves[2], current_player, moves[3]):
-                    break
+                try:
+                    moves = your_turn()
+                    if board.make_move(moves[0], moves[1], moves[2], current_player, moves[3]):
+                        break
+                except(ValueError):
+                    print("Invalid input!")
 
         if current_player == 2:
             print(f"Current player {current_player}")
             print("Machine makes a move:")
             best_move = None
             best_value = -inf
+            beta = inf
             legal_moves = generate_legal_moves(board)
             if legal_moves:
                 for move in legal_moves:
-                    eva = minimax(move, depth=50, maximizingPlayer=False)
+                    eva = minimax(move, depth=10, alpha=best_value, beta=beta, maximizingPlayer=False)
                     if eva > best_value:
                         best_value = eva
                         best_move = move
