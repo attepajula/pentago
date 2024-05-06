@@ -51,20 +51,25 @@ class PentagoBoard:
     
     def is_terminal(self):
         for i in range(6):
-            for j in range(3):
+            for j in range(2):
                 if self.state[i][j] != "_" and self.state[i][j] == self.state[i][j+1] == self.state[i][j+2] == self.state[i][j+3] == self.state[i][j+4]:
-                    return True
+                    print("1", self.print_board())
+                    self.terminal = True
                 if self.state[j][i] != "_" and self.state[j][i] == self.state[j+1][i] == self.state[j+2][i] == self.state[j+3][i] == self.state[j+4][i]:
-                    return True
+                    print("1", self.print_board())
+                    self.terminal = True
 
-        for i in range(3):
-            for j in range(3):
+        for i in range(2):
+            for j in range(2):
                 if self.state[i][j] != "_" and self.state[i][j] == self.state[i+1][j+1] == self.state[i+2][j+2] == self.state[i+3][j+3] == self.state[i+4][j+4]:
-                    return True
+                    print("2", self.print_board())
+                    self.terminal = True
                 if self.state[i][5-j] != "_" and self.state[i][5-j] == self.state[i+1][4-j] == self.state[i+2][3-j] == self.state[i+3][2-j] == self.state[i+4][1-j]:
-                    return True
+                    print("2", self.print_board())
+                    self.terminal = True
 
         if "_" not in [symbol for row in self.state for symbol in row]:
-            return True
+            print("3", self.print_board())
+            self.terminal = True
 
-        return False
+        return self.terminal

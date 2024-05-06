@@ -4,7 +4,6 @@ from random import randint
 
 def your_turn():
     # Your turn
-    # Need to raise an error in case of string in place of integer!!!!!
     row = int(input("Choose row (1-6): ")) - 1
     col = int(input("Choose column (1-6): ")) - 1
     quadrant = int(input("Choose quarter (1-4): ")) - 1
@@ -43,13 +42,12 @@ def play():
             legal_moves = generate_legal_moves(board)
             if legal_moves:
                 for move in legal_moves:
-                    eva = minimax(move, depth=10, alpha=best_value, beta=beta, maximizingPlayer=False)
+                    new_board = move.copy()
+                    eva = minimax(new_board, depth=6, alpha=best_value, beta=beta, maximizingPlayer=False)
                     if eva > best_value:
                         best_value = eva
                         best_move = move
                 board = best_move
-        if board.is_terminal():
-            board.terminal = True
         board.print_board()
 
         # Change turns
