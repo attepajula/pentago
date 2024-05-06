@@ -36,18 +36,11 @@ def play():
         if current_player == 2:
             print(f"Current player {current_player}")
             print("Machine makes a move:")
-            best_move = None
-            best_value = -inf
-            beta = inf
-            legal_moves = generate_legal_moves(board)
-            if legal_moves:
-                for move in legal_moves:
-                    new_board = move.copy()
-                    eva = minimax(new_board, depth=6, alpha=best_value, beta=beta, maximizingPlayer=False)
-                    if eva > best_value:
-                        best_value = eva
-                        best_move = move
+            best_move = iterative_deepening(board, max_depth=2)
+            if best_move:
                 board = best_move
+
+        board.is_terminal()
         board.print_board()
 
         # Change turns
