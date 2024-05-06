@@ -34,19 +34,21 @@ def evaluate(board):
     user_score = 0
 
     for line in lines:
-        ai_score += evaluate_line(line, "X", ai_score, user_score)
-        user_score += evaluate_line(line, "O", ai_score, user_score)
+        # Count AI and user symbols in the line
+        ai_count = line.count(ai_symbol)
+        user_count = line.count(user_symbol)
 
-    def evaluate_line(line, symbol):
-        ai_score += line.count(ai_symbol) / 2
-        user_score += line.count(user_symbol) / 2
+        # Update AI and user scores
+        ai_score += ai_count / 2
+        user_score += user_count / 2
 
-        if line.count(symbol) == 5 or line.count(symbol) == 6:
-            if line[1]:
-                if symbol == user_symbol:
-                    user_score += 50
-                if symbol == ai_symbol:
-                    ai_score += 50
+        # Check for winning patterns and update scores accordingly
+        if ai_count == 5 or ai_count == 6:
+            if ai_symbol in line[1]:
+                ai_score += 50
+        elif user_count == 5 or user_count == 6:
+            if user_symbol in line[1]:
+                user_score += 50
 
         # Center positions
         center_positions = [(1, 1), (1, 4), (4, 1), (4, 4)]
@@ -58,21 +60,11 @@ def evaluate(board):
                 user_score += 3
 
         # Defence
-        if ai_score < 10:
-            if user_score > 15:
-                user_score += 15
-        
-        if symbol == "O":
-            return user_score
-        else:
-            return ai_score
-
-    for line in lines:
-        ai_score += evaluate_line(line, "X")
-        user_score += evaluate_line(line, "O")
+        if ai_score < 10 and user_score > 15:
+            user_score += 15
 
     return ai_score - user_score
-
+ 
 def generate_legal_moves(board):
     legal_moves = []
 
