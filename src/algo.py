@@ -2,66 +2,65 @@ from board import PentagoBoard
 from math import inf
 import random
 
-def minimax(board, depth, alpha, beta, maximizingPlayer):
-    if depth == 0 or board.is_terminal() == True:
+def iterative_deepening(board, max_depth):
+    best_move = None
+    best_value = float('-inf')
+    for depth in range(1, max_depth + 1):
+        move = minimax(board, depth)
+        value = evaluate(move)
+        if value > best_value:
+            best_value = value
+            best_move = move
+    return best_move
+
+def minimax(board, depth):
+    alpha = float('-inf')
+    beta = float('inf')
+    maximizingPlayer = False
+    best_move = None
+    best_value = float('-inf')
+    for move in generate_legal_moves(board):
+        value = min_value(move, depth - 1, alpha, beta, maximizingPlayer)
+        if value > best_value:
+            best_value = value
+            best_move = move
+    return best_move
+
+def max_value(board, depth, alpha, beta, maximizingPlayer):
+    if depth == 0 or board.is_terminal():
         return evaluate(board)
-    if maximizingPlayer:
-        maxEval = -inf
-        for move in generate_legal_moves(board):
-            eva = minimax(move, depth - 1, alpha, beta, False)
-            maxEval = max(maxEval, eva)
-            alpha = max(alpha, eva)
-            if beta <= alpha:
-                break
-        return maxEval
-    else:
-        minEval = inf
-        for move in generate_legal_moves(board):
-            eva = minimax(move, depth - 1, alpha, beta, True)
-            minEval = min(minEval, eva)
-            beta = min(beta, eva)
-            if beta <= alpha:
-                break
-        return minEval
+    v = float('-inf')
+    for move in generate_legal_moves(board):
+        v = max(v, min_value(move, depth - 1, alpha, beta, not maximizingPlayer))
+        alpha = max(alpha, v)
+        if beta <= alpha:
+            break
+    return v
+
+def min_value(board, depth, alpha, beta, maximizingPlayer):
+    if depth == 0 or board.is_terminal():
+        return evaluate(board)
+    v = float('inf')
+    for move in generate_legal_moves(board):
+        v = min(v, max_value(move, depth - 1, alpha, beta, not maximizingPlayer))
+        beta = min(beta, v)
+        if beta <= alpha:
+            break
+    return v
 
 def evaluate(board):
-    rows = [''.join(row) for row in board.state]
-    cols = [''.join(col) for col in zip(*board.state)]
-    lines = rows + cols
     ai_symbol = "X"
     user_symbol = "O"
     ai_score = 0
     user_score = 0
 
-    for line in lines:
-        # Count AI and user symbols in the line
-        ai_count = line.count(ai_symbol)
-        user_count = line.count(user_symbol)
-
-        # Update AI and user scores
-        ai_score += ai_count / 2
-        user_score += user_count / 2
-
-        # Check for winning patterns and update scores accordingly
-        if ai_count == 5 or ai_count == 6:
-            if ai_symbol in line[1]:
-                ai_score += 50
-        elif user_count == 5 or user_count == 6:
-            if user_symbol in line[1]:
-                user_score += 50
-
-        # Center positions
-        center_positions = [(1, 1), (1, 4), (4, 1), (4, 4)]
-        random.shuffle(center_positions)
-        for row, col in center_positions:
-            if board.state[row][col] == ai_symbol:
-                ai_score += 3
-            elif board.state[row][col] == user_symbol:
-                user_score += 3
-
-        # Defence
-        if ai_score < 10 and user_score > 15:
-            user_score += 15
+    # Weight center points of segments
+    center_positions = [(1, 1), (1, 4), (4, 1), (4, 4)]
+    for row, col in center_positions:
+        if board.state[row][col] == ai_symbol:
+            ai_score += 2
+        elif board.state[row][col] == user_symbol:
+            user_score += 2
 
     return ai_score - user_score
  
