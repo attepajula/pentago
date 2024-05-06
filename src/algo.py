@@ -54,6 +54,57 @@ def evaluate(board):
     ai_score = 0
     user_score = 0
 
+    rows = [''.join(row) for row in board.state]
+    cols = [''.join(col) for col in zip(*board.state)]
+
+    lines = rows + cols
+
+    # Evaluate rows and columns
+    for line in lines:
+        ai_count = line.count(ai_symbol)
+        user_count = line.count(user_symbol)
+
+        # Check if there are any opponent symbols blocking the line
+        if user_count > 0:
+            break
+
+        # Check for AI's winning pattern
+        if ai_count == 5 or ai_count == 6:
+            ai_score += 100
+        elif ai_count == 4:
+            ai_score += 50
+        elif ai_count == 3:
+            ai_score += 10
+
+    # Evaluate diagonals
+    for i in range(2):
+        for j in range(2):
+            # Evaluate diagonal from top-left to bottom-right
+            diag1 = ''.join([board.state[i+k][j+k] for k in range(6 - max(i, j))])
+            ai_count = diag1.count(ai_symbol)
+            user_count = diag1.count(user_symbol)
+            if user_count > 0:
+                break
+            if ai_count == 5 or ai_count == 6:
+                ai_score += 100
+            elif ai_count == 4:
+                ai_score += 50
+            elif ai_count == 3:
+                ai_score += 10
+
+            # Evaluate diagonal from top-right to bottom-left
+            diag2 = ''.join([board.state[i+k][5-j-k] for k in range(6 - max(i, j))])
+            ai_count = diag2.count(ai_symbol)
+            user_count = diag2.count(user_symbol)
+            if user_count > 0:
+                break
+            if ai_count == 5 or ai_count == 6:
+                ai_score += 100
+            elif ai_count == 4:
+                ai_score += 50
+            elif ai_count == 3:
+                ai_score += 10
+
     # Weight center points of segments
     center_positions = [(1, 1), (1, 4), (4, 1), (4, 4)]
     for row, col in center_positions:
