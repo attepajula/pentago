@@ -7,7 +7,13 @@ def your_turn():
     row = int(input("Choose row (1-6): ")) - 1
     col = int(input("Choose column (1-6): ")) - 1
     quadrant = int(input("Choose quarter (1-4): ")) - 1
-    direction = input("Choose direction (CW or CCW): ").upper()
+    directionInput = input("Choose direction (CW or CCW): ").upper()
+    if directionInput == "CW":
+        direction = 1
+    elif directionInput == "CCW":
+        direction = -1
+    else:
+        direction = None
 
     return [row, col, quadrant, direction]
 
@@ -36,7 +42,7 @@ def play():
         if current_player == 2:
             print(f"Current player {current_player}")
             print("Machine makes a move:")
-            best_move = iterative_deepening(board, max_depth=2)
+            best_move = iterative_deepening(board, max_depth=5, time_limit=0.1)
             if best_move:
                 board = best_move
 
