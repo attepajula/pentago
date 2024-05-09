@@ -7,49 +7,52 @@ def iterative_deepening(board, max_depth, time_limit):
     best_move = None
     best_value = float('-inf')
     start_time = time.time()
-    start_time_minimax = time.time()
     
     depth = 1
     
-    while depth <= max_depth and time.time() - start_time < time_limit:
+    while time.time() - start_time < time_limit:
+        start_time_minimax = time.time()
         while time.time() - start_time_minimax < time_limit:
-            move, value = minimax(board, depth, hash_table)
+            move, value = minimax(board, depth, max_depth, True)
             if value > best_value:
                 best_value = value
-                print("Value:", value)
                 best_move = move
         depth += 1
-        start_time_minimax = time.time()
+        if depth > max_depth:
+            break
     
     return best_move
 
-def minimax(board, depth, hash_table, alpha=float('-inf'), beta=float('inf'), maximizingPlayer=True):
-    if board in hash_table and hash_table[board][1] == depth:
-        minimax(board, depth - 1, hash_table, alpha, beta, hash_table[board][2])
-    
-    if depth == 0 or board.is_terminal():
-        return None, evaluate(board)
+def minimax(board, depth, max_depth, maximizingPlayer, alpha=float('-inf'), beta=float('inf'),):
+    if depth == max_depth or board.is_terminal():
+        value = evaluate(board)
+        print(value)
+        return None, value
     
     best_move = None
     best_value = float('-inf') if maximizingPlayer else float('inf')
     
-    for move in generate_legal_moves(board):
-        new_board = move
-        _, value = minimax(new_board, depth - 1, hash_table, alpha, beta, not maximizingPlayer)
-        if maximizingPlayer:
-            if value > best_value:
-                best_value = value
-                best_move = move
-            alpha = max(alpha, best_value)
-        else:
-            if value < best_value:
-                best_value = value
-                best_move = move
-            beta = min(beta, best_value)
-        if beta <= alpha:
-            break
-    
-    hash_table[board] = (best_move, depth, maximizingPlayer)
+    for i in generate_legal_moves(board, maximizingPlayer):
+        new_board = board.copy()
+        row, col, quadrant, player, direction = i
+        if new_board.make_move(row, col, quadrant, player, direction):
+            new_board.print_board()
+            if maximizingPlayer:
+                _, value = minimax(new_board, depth + 1, max_depth, False, alpha, beta)
+                if value > best_value:
+                    best_value = value
+                    best_move = new_board
+                alpha = max(alpha, best_value)
+                if beta <= alpha:
+                    break
+            else:
+                _, value = minimax(new_board, depth + 1, max_depth, True, alpha, beta)
+                if value < best_value:
+                    best_value = value
+                    best_move = new_board
+                beta = min(beta, best_value)
+                if beta <= alpha:
+                    break
     
     return best_move, best_value
 
@@ -161,17 +164,19 @@ def evaluate(board):
     #print("AI:", ai_score, "User:", user_score)
     return ai_score - user_score
 
-def generate_legal_moves(board):
+def generate_legal_moves(board, maximizingPlayer):
     legal_moves = []
+    seq = [3, 2, 4, 1, 0, 5]
 
-    empty_squares = [(row, col) for row in range(6) for col in range(6) if board.state[row][col] == 0]
+    empty_squares = [(row, col) for row in seq for col in seq if board.state[row][col] == 0]
 
     if empty_squares:
         for row, col in empty_squares:
             for quadrant in range(4):
                 for direction in [1, -1]:
-                    new_board = board.copy()
-                    if new_board.make_move(row, col, quadrant, 2, direction):
-                        legal_moves.append(new_board)
+                    if maximizingPlayer:
+                        legal_moves.append((row, col, quadrant, 2, direction))
+                    else:
+                        legal_moves.append((row, col, quadrant, 1, direction))
 
     return legal_moves
