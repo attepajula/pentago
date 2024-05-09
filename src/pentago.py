@@ -42,7 +42,7 @@ def play():
         if current_player == 2:
             print(f"Current player {current_player}")
             print("Machine makes a move:")
-            best_move = iterative_deepening(board, max_depth=5, time_limit=0.1)
+            best_move = iterative_deepening(board, max_depth=3, time_limit=1)
             if best_move:
                 board = best_move
 
