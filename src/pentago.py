@@ -25,9 +25,8 @@ def play():
     board.print_board()
 
     # Main loop
-    while not board.terminal:
+    while board.terminal == 0:
         if current_player == 1:
-            print(f"Current player {current_player}")
             print("Your turn:")
             
             while True:
@@ -42,7 +41,7 @@ def play():
         if current_player == 2:
             print(f"Current player {current_player}")
             print("Machine makes a move:")
-            best_move = iterative_deepening(board, max_depth=3, time_limit=1)
+            best_move = minimax(board, depth=0, max_depth=2, maximizingPlayer=True)[0]
             if best_move:
                 board = best_move
 
