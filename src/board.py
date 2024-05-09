@@ -1,7 +1,7 @@
 class PentagoBoard:
     def __init__(self):
         self.state = [[0 for _ in range(6)] for _ in range(6)]
-        self.terminal = False
+        self.terminal = 0
         self.legal_moves = []
 
     def print_board(self):
@@ -56,22 +56,30 @@ class PentagoBoard:
     def is_terminal(self):
         for i in range(6):
             for j in range(2):
-                if self.state[i][j] != 0 and self.state[i][j] == self.state[i][j+1] == self.state[i][j+2] == self.state[i][j+3] == self.state[i][j+4]:
-                    self.terminal = True
+                if self.state[i][j] == 1 and self.state[i][j] == self.state[i][j+1] == self.state[i][j+2] == self.state[i][j+3] == self.state[i][j+4]:
+                    self.terminal = 1
+                if self.state[i][j] == 2 and self.state[i][j] == self.state[i][j+1] == self.state[i][j+2] == self.state[i][j+3] == self.state[i][j+4]:
+                    self.terminal = 2
 
         for i in range(2):
             for j in range(6):
-                if self.state[i][j] != 0 and self.state[i][j] == self.state[i+1][j] == self.state[i+2][j] == self.state[i+3][j] == self.state[i+4][j]:
-                    self.terminal = True
+                if self.state[i][j] == 1 and self.state[i][j] == self.state[i+1][j] == self.state[i+2][j] == self.state[i+3][j] == self.state[i+4][j]:
+                    self.terminal = 1
+                if self.state[i][j] == 2 and self.state[i][j] == self.state[i+1][j] == self.state[i+2][j] == self.state[i+3][j] == self.state[i+4][j]:
+                    self.terminal = 2
 
         for i in range(2):
             for j in range(2):
-                if self.state[i][j] != 0 and self.state[i][j] == self.state[i+1][j+1] == self.state[i+2][j+2] == self.state[i+3][j+3] == self.state[i+4][j+4]:
-                    self.terminal = True
-                if self.state[i][5-j] != 0 and self.state[i][5-j] == self.state[i+1][4-j] == self.state[i+2][3-j] == self.state[i+3][2-j] == self.state[i+4][1-j]:
-                    self.terminal = True
+                if self.state[i][j] == 1 and self.state[i][j] == self.state[i+1][j+1] == self.state[i+2][j+2] == self.state[i+3][j+3] == self.state[i+4][j+4]:
+                    self.terminal = 1
+                if self.state[i][5-j] == 1 and self.state[i][5-j] == self.state[i+1][4-j] == self.state[i+2][3-j] == self.state[i+3][2-j] == self.state[i+4][1-j]:
+                    self.terminal = 1
+                if self.state[i][j] == 2 and self.state[i][j] == self.state[i+1][j+1] == self.state[i+2][j+2] == self.state[i+3][j+3] == self.state[i+4][j+4]:
+                    self.terminal = 2
+                if self.state[i][5-j] == 2 and self.state[i][5-j] == self.state[i+1][4-j] == self.state[i+2][3-j] == self.state[i+3][2-j] == self.state[i+4][1-j]:
+                    self.terminal = 2
 
         if 0 not in [symbol for row in self.state for symbol in row]:
-            self.terminal = True
+            self.terminal = 3
 
         return self.terminal
