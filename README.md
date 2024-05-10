@@ -1,5 +1,5 @@
 # Pentago
-
+Fisrt:
 > poetry install
 
 Play game
@@ -8,4 +8,4 @@ Play game
 Start tests:
 > invoke test
 
-Pls read other documentation.
+Pls read other documentation and user guide.
