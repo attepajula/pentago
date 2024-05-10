@@ -2,7 +2,7 @@
 First:
 > poetry install
 
-Play game
+Play game:
 > invoke play
 
 Start tests:
