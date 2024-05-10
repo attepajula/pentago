@@ -1,5 +1,5 @@
 # Pentago
-Fisrt:
+First:
 > poetry install
 
 Play game
