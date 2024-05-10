@@ -7,6 +7,8 @@
 If case of you are using Poetry:
 <code>$ poetry run invoke play</code>
 
+**Exit: ^C**
+
 ## Rules:
 
 Pentago is played on a 6x6 grid divided into four 3x3 quadrants.
