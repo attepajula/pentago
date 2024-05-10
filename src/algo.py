@@ -64,14 +64,23 @@ def evaluate(board):
     for diag in diagsR:
         diagonal_counts.append(evaluate_line(diag))
 
+    for i in row_counts:
+        if i == -10:
+            user_score += 10
+    for j in col_counts:
+        if j == -10:
+            user_score += 10
+    for h in diagonal_counts:
+        if h == -10:
+            user_score += 10
+
     max_row_count = max(row_counts)
     max_col_count = max(col_counts)
     max_diagonal_count = max(diagonal_counts)
     ai_score += max(max_row_count, max_col_count, max_diagonal_count)
 
     if board.is_terminal() == user_symbol:
-        user_score += 10000
-        return ai_score - user_score
+        return -100000
     
     if board.is_terminal() == ai_symbol:
         ai_score += 10000
@@ -107,8 +116,12 @@ def evaluate_line(line):
             counter = line.count(ai_symbol)
         else:
             counter = -1
+
+    if line.count(user_symbol) >= 3:
+        counter = -10
         
-    return counter ** 2 if counter != -1 else -1
+    return counter ** 2 if counter >= 0 else counter
+
 
 def generate_legal_moves(board, maximizingPlayer):
     legal_moves = []
