@@ -51,61 +51,31 @@ def evaluate(board):
     diagsR = [[board.state[0][4], board.state[1][3], board.state[2][2], board.state[3][1], board.state[4][0]],
             [board.state[0][5], board.state[1][4], board.state[2][3], board.state[3][2], board.state[4][1], board.state[5][0]],
             [board.state[1][5], board.state[2][4], board.state[3][3], board.state[4][2], board.state[5][1]]]
-
-
+    
     for row in board.state:
-        temp = 0
-        for i in row:
-            if i == ai_symbol:
-                temp += 1
-            elif i == user_symbol:
-                temp = 0
-                break
-        row_counts.append(temp)
+        row_counts.append(evaluate_line(row))
 
     for col in zip(*board.state):
-        temp = 0
-        for i in col:
-            if i == ai_symbol:
-                temp += 1
-            elif i == user_symbol:
-                temp = 0
-                break
-        col_counts.append(temp)
+        col_counts.append(evaluate_line(col))
 
     for diag in diagsL:
-        temp = 0
-        for i in diag:
-            if i == ai_symbol:
-                temp += 1
-            elif i == user_symbol:
-                temp = 0
-                break
-        diagonal_counts.append(temp)
+        diagonal_counts.append(evaluate_line(diag))
 
     for diag in diagsR:
-        temp = 0
-        for i in diag:
-            if i == ai_symbol:
-                temp += 1
-            elif i == user_symbol:
-                temp = 0
-                break
-        diagonal_counts.append(temp)
- 
-    max_row_count = max(row_counts) ** 2
-    max_col_count = max(col_counts) ** 2
-    max_diagonal_count = max(diagonal_counts) ** 2
+        diagonal_counts.append(evaluate_line(diag))
 
+    max_row_count = max(row_counts)
+    max_col_count = max(col_counts)
+    max_diagonal_count = max(diagonal_counts)
     ai_score += max(max_row_count, max_col_count, max_diagonal_count)
+
     if board.is_terminal() == user_symbol:
-        user_score = 10000
+        user_score += 10000
         return ai_score - user_score
     
     if board.is_terminal() == ai_symbol:
-        ai_score = 10000
-        return ai_score - user_score
-
+        ai_score += 10000
+    
     # Weight center points of segments
     if max(max_row_count, max_col_count, max_diagonal_count) < 3:
         center_positions = [(1, 1), (1, 4), (4, 1), (4, 4)]
@@ -116,6 +86,29 @@ def evaluate(board):
                 user_score += 10
 
     return ai_score - user_score
+
+def evaluate_line(line):
+    ai_symbol = 2
+    user_symbol = 1
+    counter = 0
+
+    if len(line) == 6:
+        if user_symbol not in line:
+            counter = line.count(ai_symbol)
+        elif user_symbol == line[0] and user_symbol not in line[1:]:
+            counter = line.count(ai_symbol)
+        elif user_symbol == line[5] and user_symbol not in line[:5]:
+            counter = line.count(ai_symbol)
+        else:
+            counter = -1
+
+    else: # line lenght == 5:
+        if user_symbol not in line:
+            counter = line.count(ai_symbol)
+        else:
+            counter = -1
+        
+    return counter ** 2 if counter != -1 else -1
 
 def generate_legal_moves(board, maximizingPlayer):
     legal_moves = []
