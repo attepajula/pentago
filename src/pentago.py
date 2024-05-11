@@ -1,12 +1,12 @@
-from board import *
-from algo import *
+from board import PentagoBoard
+from algo import minimax
 from random import randint
 from itertools import cycle
 from shutil import get_terminal_size
 from threading import Thread
 from time import sleep
 
-class Loader:
+class Loader: # Source: https://stackoverflow.com/a/66558182
     def __init__(self, desc="Loading...", end="Done!", timeout=0.1):
         """
         A loader-like context manager
@@ -43,7 +43,6 @@ class Loader:
         cols = get_terminal_size((80, 20)).columns
         print("\r" + " " * cols, end="", flush=True)
         print(f"\r{self.end}", flush=True)
-
 
 def your_turn():
     # Your turn
@@ -82,7 +81,7 @@ def play():
 
         if current_player == 2:
             print("Machine makes a move:")
-            loader = Loader("Making move...", "").start()
+            loader = Loader("Making a move...", "").start()
             best_move = minimax(board, depth=0, max_depth=2, maximizingPlayer=True)[0]
             if best_move:
                 board = best_move
@@ -92,5 +91,10 @@ def play():
 
         # Change turns
         current_player = 2 if current_player == 1 else 1
-
-    print("Game over!")
+    
+    if board.terminal == 2:
+        print("Game over! AI Wins!")
+    if board.terminal == 1:
+        print("Game over! You Win!")
+    if board.terminal == 3:
+        print("Game over! Draw!")
