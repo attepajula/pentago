@@ -1,8 +1,23 @@
 class PentagoBoard:
+    """
+    This class represents a simple Pentago Board.
+
+    Methods:
+        print_board(self): Prints the board.
+        make_move(self, row, col, quadrant, player, direction): Makes a move on a board state.
+        rotate(self, quadrant, counterclockwise): Rotates a quadrant in a board state.
+        copy(self): Copies board with all attributes.
+        is_terminal(self): Determinates if the board is in terminal state.
+    """
     def __init__(self):
+        """Initializes a new instance of PentagoBoard.
+
+        Attributes:
+            state (list): Optional. Initial state of the board. Defaults to an empty 6x6 grid.
+            terminal (int): Optional. Terminal state indicator. Defaults to 0.
+        """
         self.state = [[0 for _ in range(6)] for _ in range(6)]
         self.terminal = 0
-        self.legal_moves = []
 
     def print_board(self):
         """Prints the current state of the board.
@@ -79,7 +94,7 @@ class PentagoBoard:
         new_board = PentagoBoard()
         new_board.state = [row[:] for row in self.state]
         return new_board
-    
+
     def is_terminal(self):
         """Determinates if the board (self) is in terminal state.
         Returns:

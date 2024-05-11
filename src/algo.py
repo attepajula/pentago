@@ -1,7 +1,22 @@
-from board import PentagoBoard
 from math import inf
+from board import PentagoBoard
 
 def minimax(board, depth, max_depth, maximizingPlayer, alpha=float('-inf'), beta=float('inf'),):
+    """Uses the minimax algorithm with alpha-beta pruning to determine the best move for the AI on a given board/future move.
+
+    Args:
+        board (Board): At first call the current game board, then a move from a list.
+        depth (int): Current depth in the search tree.
+        max_depth (int): Maximum depth to search.
+        maximizingPlayer (bool): Indicates whether the AI is maximizing or minimizing.
+        alpha (float, optional): The best value that the maximizing player currently can guarantee at this level or above.
+                                 Defaults to negative infinity.
+        beta (float, optional): The best value that the minimizing player currently can guarantee at this level or above.
+                                Defaults to positive infinity.
+    
+    Returns:
+        tuple: A tuple containing the best move (a board state) and its corresponding value.
+    """
     if depth == max_depth or board.is_terminal():
         return None, evaluate(board)
     
@@ -36,6 +51,14 @@ def minimax(board, depth, max_depth, maximizingPlayer, alpha=float('-inf'), beta
     return best_move, best_value
 
 def evaluate(board):
+    """Evaluates the value of a move for the given board state.
+
+    Args:
+        board (Board): The game board/future move.
+
+    Returns:
+        int: The evaluation score of the move for the AI player.
+    """
     ai_symbol = 2
     user_symbol = 1
     ai_score = 0
@@ -74,7 +97,7 @@ def evaluate(board):
     max_diagonal_count_user = max(t[1] for t in diagonal_counts)
     user_score += max(max_row_count_user, max_col_count_user, max_diagonal_count_user)
 
-    if board.is_terminal() == user_symbol:
+    if board.is_terminal() == user_symbol: # User is winning
         return -100000
     
     if board.is_terminal() == ai_symbol:
@@ -92,6 +115,15 @@ def evaluate(board):
     return ai_score - user_score
 
 def evaluate_line(line):
+    """Evaluates the counts of AI and user symbols in a line. The line is interrupted, 
+    if the five same symbols can't occur uninterrupted.
+
+    Args:
+        line (list): A list representing a row, column, or diagonal in the game board.
+
+    Returns:
+        tuple: A tuple containing the squared (weighted) uninterrupted counts of AI and user symbols in line.
+    """
     ai_symbol = 2
     user_symbol = 1
     ai_counter = 0
@@ -121,6 +153,15 @@ def evaluate_line(line):
     return (ai_counter ** 2, user_counter ** 2)
 
 def generate_legal_moves(board, maximizingPlayer):
+    """Generates all legal moves for the AI (maximizingPlayer or not) on the given board.
+
+    Args:
+        board (Board): The game board/future move.
+        maximizingPlayer (bool): Indicates whether the AI is maximizing or minimizing.
+
+    Returns:
+        list: A list of legal moves, each represented as a tuple containing the row, column, quadrant, player, and direction.
+    """
     legal_moves = []
     seq = [4, 1, 2, 3, 0, 5]
 
