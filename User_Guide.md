@@ -1,12 +1,14 @@
 # Pentago User Guide and Rules
 
-## Starting the game:
+## Starting and playing the game:
 
 <code>$ Python3 src/index.py</code>
 
-If case of you are using Poetry:
+In case of you are using Poetry:
 <code>$ poetry run invoke play</code>
 
+In case of wrong input:
+Please enter an invalid input, for example null. Hence you get a new chance for input.
 **Exit: ^C**
 
 ## Rules:
