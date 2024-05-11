@@ -5,6 +5,11 @@ class PentagoBoard:
         self.legal_moves = []
 
     def print_board(self):
+        """Prints the current state of the board.
+
+        Each cell is represented by "X" for AI (player 2),
+        "O" for user (player 1), and "_" for an empty cell.
+        """
         horizontal_line = "+---------+"
         print(horizontal_line)
         for row in self.state:
@@ -12,8 +17,19 @@ class PentagoBoard:
             print(row)
         print(horizontal_line)
 
+    def make_move(self, row, col, quadrant, player, direction):
+        """Makes a move on the board.
 
-    def make_move(self, row, col, quadrant, player, direction): 
+        Args:
+            row (int): The row index of the cell to place the move (0 - 5).
+            col (int): The column index of the cell to place the move (0 - 5).
+            quadrant (int): The quadrant to rotate after placing the move (0 to 3).
+            player (int): The player making the move (1 for user, 2 for the AI).
+            direction (int): The direction of rotation (1 for clockwise, -1 for counterclockwise).
+
+        Returns:
+            bool: True if the move was successfully made, False otherwise (Position full or invalid input/inputs).
+        """
         if not (0 <= row < 6 and 0 <= col < 6 and 0 <= quadrant <= 3):
             print("Invalid input!")
             return False
@@ -33,6 +49,12 @@ class PentagoBoard:
         return True
 
     def rotate(self, quadrant, counterclockwise: bool):
+        """Rotates a quadrant of the board.
+
+        Args:
+            quadrant (int): The quadrant to rotate (0 to 3).
+            counterclockwise (bool): Whether to rotate counterclockwise (True) or clockwise (False).
+        """
         row_start = (quadrant // 2) * 3
         col_start = (quadrant % 2) * 3
 
@@ -49,11 +71,21 @@ class PentagoBoard:
                 self.state[row_start + i][col_start + j] = rotated_segment[i][j]
 
     def copy(self):
+        """Copies the board.
+
+        Returns:
+            class (self): Copied board.
+        """
         new_board = PentagoBoard()
         new_board.state = [row[:] for row in self.state]
         return new_board
     
     def is_terminal(self):
+        """Determinates if the board (self) is in terminal state.
+        Returns:
+            int: self.terminal, 0 if not terminal, 1 if user wins, 2 if AI wins
+            and 3 in case of board full.
+        """
         for i in range(6):
             for j in range(2):
                 if self.state[i][j] == 1 and self.state[i][j] == self.state[i][j+1] == self.state[i][j+2] == self.state[i][j+3] == self.state[i][j+4]:
