@@ -40,9 +40,9 @@ def evaluate(board):
     user_symbol = 1
     ai_score = 0
     user_score = 0
-    row_counts = [0]
-    col_counts = [0]
-    diagonal_counts = [0]
+    row_counts = [(0, 0)]
+    col_counts = [(0, 0)]
+    diagonal_counts = [(0, 0)]
 
     diagsL = [[board.state[1][0], board.state[2][1], board.state[3][2], board.state[4][3], board.state[5][4]],
             [board.state[0][0], board.state[1][1], board.state[2][2], board.state[3][3], board.state[4][4], board.state[5][5]],
@@ -64,20 +64,15 @@ def evaluate(board):
     for diag in diagsR:
         diagonal_counts.append(evaluate_line(diag))
 
-    for i in row_counts:
-        if i == -10:
-            user_score += 10
-    for j in col_counts:
-        if j == -10:
-            user_score += 10
-    for h in diagonal_counts:
-        if h == -10:
-            user_score += 10
-
-    max_row_count = max(row_counts)
-    max_col_count = max(col_counts)
-    max_diagonal_count = max(diagonal_counts)
+    max_row_count = max(t[0] for t in row_counts)
+    max_col_count = max(t[0] for t in col_counts)
+    max_diagonal_count = max(t[0] for t in diagonal_counts)
     ai_score += max(max_row_count, max_col_count, max_diagonal_count)
+
+    max_row_count_user = max(t[1] for t in row_counts)
+    max_col_count_user = max(t[1] for t in col_counts)
+    max_diagonal_count_user = max(t[1] for t in diagonal_counts)
+    user_score += max(max_row_count_user, max_col_count_user, max_diagonal_count_user)
 
     if board.is_terminal() == user_symbol:
         return -100000
@@ -99,29 +94,31 @@ def evaluate(board):
 def evaluate_line(line):
     ai_symbol = 2
     user_symbol = 1
-    counter = 0
+    ai_counter = 0
+    user_counter = 0
 
     if len(line) == 6:
         if user_symbol not in line:
-            counter = line.count(ai_symbol)
+            ai_counter = line.count(ai_symbol)
         elif user_symbol == line[0] and user_symbol not in line[1:]:
-            counter = line.count(ai_symbol)
+            ai_counter = line.count(ai_symbol)
         elif user_symbol == line[5] and user_symbol not in line[:5]:
-            counter = line.count(ai_symbol)
-        else:
-            counter = -1
+            ai_counter = line.count(ai_symbol)
+
+        if ai_symbol not in line:
+            user_counter = line.count(user_symbol)
+        elif ai_symbol == line[0] and ai_symbol not in line[1:]:
+            user_counter = line.count(user_symbol)
+        elif ai_symbol == line[5] and ai_symbol not in line[:5]:
+            user_counter = line.count(user_symbol)
 
     else: # line lenght == 5:
         if user_symbol not in line:
-            counter = line.count(ai_symbol)
-        else:
-            counter = -1
-
-    if line.count(user_symbol) >= 3:
-        counter = -10
+            ai_counter = line.count(ai_symbol)
+        elif ai_symbol not in line:
+            user_counter =  line.count(user_symbol)
         
-    return counter ** 2 if counter >= 0 else counter
-
+    return (ai_counter ** 2, user_counter ** 2)
 
 def generate_legal_moves(board, maximizingPlayer):
     legal_moves = []
