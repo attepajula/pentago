@@ -33,7 +33,7 @@ def minimax(board, depth, max_depth, maximizingPlayer, alpha=float('-inf'), beta
                 best_value = value
                 best_move = new_board
             alpha = max(alpha, best_value)
-            if best_value > alpha:
+            if best_value > beta:
                 break
     else:
         for i in generate_legal_moves(board, maximizingPlayer):
@@ -97,7 +97,7 @@ def evaluate(board):
     max_diagonal_count_user = max(t[1] for t in diagonal_counts)
     user_score += max(max_row_count_user, max_col_count_user, max_diagonal_count_user)
 
-    # Defence
+    # Defence: the user has 4 in a row
     if max(max_row_count_user, max_col_count_user, max_diagonal_count_user) == 16:
         user_score += 10000
 
@@ -115,7 +115,6 @@ def evaluate(board):
                 ai_score += ai_score + 10
             elif board.state[row][col] == user_symbol:
                 user_score += 10
-
 
     return ai_score - user_score
 
