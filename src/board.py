@@ -99,34 +99,44 @@ class PentagoBoard:
         """Determinates if the board (self) is in terminal state.
         Returns:
             int: self.terminal, 0 if not terminal, 1 if user wins, 2 if AI wins
-            and 3 in case of board full.
+            and 3 in case of board full or draw.
         """
+        terminal_temp = [False, False, False]
         for i in range(6):
             for j in range(2):
                 if self.state[i][j] == 1 and self.state[i][j] == self.state[i][j+1] == self.state[i][j+2] == self.state[i][j+3] == self.state[i][j+4]:
-                    self.terminal = 1
+                    terminal_temp[1] = True
                 if self.state[i][j] == 2 and self.state[i][j] == self.state[i][j+1] == self.state[i][j+2] == self.state[i][j+3] == self.state[i][j+4]:
-                    self.terminal = 2
+                    terminal_temp[2] = True
 
         for i in range(2):
             for j in range(6):
                 if self.state[i][j] == 1 and self.state[i][j] == self.state[i+1][j] == self.state[i+2][j] == self.state[i+3][j] == self.state[i+4][j]:
-                    self.terminal = 1
+                    terminal_temp[1] = True
                 if self.state[i][j] == 2 and self.state[i][j] == self.state[i+1][j] == self.state[i+2][j] == self.state[i+3][j] == self.state[i+4][j]:
-                    self.terminal = 2
+                    terminal_temp[2] = True
 
         for i in range(2):
             for j in range(2):
                 if self.state[i][j] == 1 and self.state[i][j] == self.state[i+1][j+1] == self.state[i+2][j+2] == self.state[i+3][j+3] == self.state[i+4][j+4]:
-                    self.terminal = 1
+                    terminal_temp[1] = True
                 if self.state[i][5-j] == 1 and self.state[i][5-j] == self.state[i+1][4-j] == self.state[i+2][3-j] == self.state[i+3][2-j] == self.state[i+4][1-j]:
-                    self.terminal = 1
+                    terminal_temp[1] = True
                 if self.state[i][j] == 2 and self.state[i][j] == self.state[i+1][j+1] == self.state[i+2][j+2] == self.state[i+3][j+3] == self.state[i+4][j+4]:
-                    self.terminal = 2
+                    terminal_temp[2] = True
                 if self.state[i][5-j] == 2 and self.state[i][5-j] == self.state[i+1][4-j] == self.state[i+2][3-j] == self.state[i+3][2-j] == self.state[i+4][1-j]:
-                    self.terminal = 2
+                    terminal_temp[2] = True
 
         if 0 not in [symbol for row in self.state for symbol in row]:
+            terminal_temp[0] = True
+            self.terminal = 3
+
+        if terminal_temp[1] == True:
+            self.terminal = 1
+        elif terminal_temp[2] == True:
+            self.terminal = 2
+        
+        if terminal_temp[1] == True and terminal_temp[2] == True:
             self.terminal = 3
 
         return self.terminal
