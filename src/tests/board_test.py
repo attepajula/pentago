@@ -63,5 +63,161 @@ class TestPentagoBoard(unittest.TestCase):
         ]
         self.assertEqual(self.board.state, expected_state)
 
+    def test_is_terminal_user(self):
+        self.board.state = [
+            [2, 2, 2, 2, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [1, 1, 1, 1, 1, 0],
+            [0, 0, 0, 0, 0, 0]
+        ]
+        self.board.is_terminal()
+        assert self.board.terminal == 1
+
+    def test_is_terminal_ai(self):
+        self.board.state = [
+            [2, 2, 2, 2, 2, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0],
+            [1, 1, 1, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0]
+        ]
+        self.board.is_terminal()
+        assert self.board.terminal == 2
+
+    def test_is_terminal_full(self):
+        self.board.state = [
+            [2, 1, 2, 2, 1, 2],
+            [1, 2, 1, 1, 2, 1],
+            [2, 1, 2, 2, 1, 2],
+            [1, 2, 1, 1, 2, 1],
+            [2, 1, 2, 2, 1, 2],
+            [1, 2, 1, 1, 2, 1]
+        ]
+        self.board.is_terminal()
+        assert self.board.terminal == 3
+        
+    def test_is_terminal_user_all_rows(self):
+        for i in range(6):
+            for j in range(2):
+                self.board.state[i][j] = 1 
+                self.board.state[i][j+1] = 1
+                self.board.state[i][j+2] = 1
+                self.board.state[i][j+3] = 1
+                self.board.state[i][j+4] = 1
+
+            self.board.is_terminal()
+            assert self.board.terminal == 1
+            
+            for h in range(6):
+                self.board.state[i][h] = 0
+
+    def test_is_terminal_ai_all_rows(self):
+        for i in range(6):
+            for j in range(2):
+                self.board.state[i][j] = 2
+                self.board.state[i][j+1] = 2
+                self.board.state[i][j+2] = 2
+                self.board.state[i][j+3] = 2
+                self.board.state[i][j+4] = 2
+
+            self.board.is_terminal()
+            assert self.board.terminal == 2
+            
+            for h in range(6):
+                self.board.state[i][h] = 0
+
+    def test_is_terminal_user_all_cols(self):
+        for i in range(2):
+            for j in range(6):
+                self.board.state[i][j] = 1
+                self.board.state[i+1][j] = 1
+                self.board.state[i+2][j] = 1
+                self.board.state[i+3][j] = 1
+                self.board.state[i+4][j] = 1
+
+            self.board.is_terminal()
+            assert self.board.terminal == 1
+            
+            for h in range(6):
+                self.board.state[i][h] = 0
+
+    def test_is_terminal_ai_all_cols(self):
+        for i in range(2):
+            for j in range(6):
+                self.board.state[i][j] = 2
+                self.board.state[i+1][j] = 2
+                self.board.state[i+2][j] = 2
+                self.board.state[i+3][j] = 2
+                self.board.state[i+4][j] = 2
+
+            self.board.is_terminal()
+            assert self.board.terminal == 2
+            
+            for h in range(6):
+                self.board.state[i][h] = 0
+
+    def test_is_terminal_user_all_diags(self):
+        for i in range(2):
+            for j in range(2):
+                self.board.state[i][j] = 1
+                self.board.state[i+1][j+1] = 1
+                self.board.state[i+2][j+2] = 1
+                self.board.state[i+3][j+3] = 1
+                self.board.state[i+4][j+4] = 1
+
+            self.board.is_terminal()
+            assert self.board.terminal == 1
+            
+            for g in range(6):
+                for h in range(6):
+                    self.board.state[i][h] = 0
+
+            for j in range(2):
+                self.board.state[i][j-5] = 1
+                self.board.state[i+1][j-4] = 1
+                self.board.state[i+2][j-3] = 1
+                self.board.state[i+3][j-2] = 1
+                self.board.state[i+4][j-1] = 1
+
+            self.board.is_terminal()
+            assert self.board.terminal == 1
+
+            for g in range(6):
+                for h in range(6):
+                    self.board.state[i][h] = 0
+
+    def test_is_terminal_ai_all_diags(self):
+        for i in range(2):
+            for j in range(2):
+                self.board.state[i][j] = 2
+                self.board.state[i+1][j+1] = 2
+                self.board.state[i+2][j+2] = 2
+                self.board.state[i+3][j+3] = 2
+                self.board.state[i+4][j+4] = 2
+
+            self.board.is_terminal()
+            assert self.board.terminal == 2
+            
+            for g in range(6):
+                for h in range(6):
+                    self.board.state[i][h] = 0
+
+            for j in range(2):
+                self.board.state[i][j-5] = 2
+                self.board.state[i+1][j-4] = 2
+                self.board.state[i+2][j-3] = 2
+                self.board.state[i+3][j-2] = 2
+                self.board.state[i+4][j-1] = 2
+
+            self.board.is_terminal()
+            assert self.board.terminal == 2
+
+            for g in range(6):
+                for h in range(6):
+                    self.board.state[i][h] = 0
+                
 if __name__ == '__main__':
     unittest.main()
