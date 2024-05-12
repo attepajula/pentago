@@ -98,7 +98,7 @@ class TestPentagoBoard(unittest.TestCase):
         ]
         self.board.is_terminal()
         assert self.board.terminal == 3
-        
+
     def test_is_terminal_user_all_rows(self):
         for i in range(6):
             for j in range(2):
