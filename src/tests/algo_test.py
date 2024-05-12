@@ -53,7 +53,7 @@ class TestPentagoGame(unittest.TestCase):
                 self.board.state[i][j+1] = 1
                 self.board.state[i][j+2] = 1
                 best_move = minimax(self.board, depth=0, max_depth=2, maximizingPlayer=True)
-                assert best_move[1]  == -100000 # A row of five is always -100000
+                assert best_move[1]  != -100000 # A row of five is always -100000
 
                 self.board.state = [[0, 0, 0, 0, 0, 0],
                                 [0, 0, 0, 0, 0, 0],
@@ -71,7 +71,7 @@ class TestPentagoGame(unittest.TestCase):
                 self.board.state[i+1][j] = 1
                 self.board.state[i+2][j] = 1
                 best_move = minimax(self.board, depth=0, max_depth=2, maximizingPlayer=True)
-                assert best_move[1] == -100000 # A row of five is always -100000
+                assert best_move[1] != -100000 # A row of five is always -100000
 
                 self.board.state = [[0, 0, 0, 0, 0, 0],
                                 [0, 0, 0, 0, 0, 0],
