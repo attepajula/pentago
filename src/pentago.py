@@ -5,6 +5,7 @@ from itertools import cycle
 from shutil import get_terminal_size
 from threading import Thread
 from time import sleep
+import sys
 
 class Loader: # Source: https://stackoverflow.com/a/66558182
     def __init__(self, desc="Loading...", end="Done!", timeout=0.1):
@@ -44,6 +45,7 @@ class Loader: # Source: https://stackoverflow.com/a/66558182
         print("\r" + " " * cols, end="", flush=True)
         print(f"\r{self.end}", flush=True)
 
+# Core functions for the game:
 def your_turn():
     # Your turn
     row = int(input("Choose row (1-6): ")) - 1
@@ -78,6 +80,10 @@ def play():
                         break
                 except(ValueError):
                     print("Invalid input!")
+                except(KeyboardInterrupt):
+                    print(" Game over!")
+                    sys.exit()
+
 
         if current_player == 2:
             print("Machine makes a move:")
