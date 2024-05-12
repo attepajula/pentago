@@ -97,6 +97,10 @@ def evaluate(board):
     max_diagonal_count_user = max(t[1] for t in diagonal_counts)
     user_score += max(max_row_count_user, max_col_count_user, max_diagonal_count_user)
 
+    # Defence
+    if max(max_row_count_user, max_col_count_user, max_diagonal_count_user) == 16:
+        user_score += 10000
+
     if board.is_terminal() == user_symbol: # User is winning
         return -100000
     
@@ -111,6 +115,7 @@ def evaluate(board):
                 ai_score += ai_score + 10
             elif board.state[row][col] == user_symbol:
                 user_score += 10
+
 
     return ai_score - user_score
 
