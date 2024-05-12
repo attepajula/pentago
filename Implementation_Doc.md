@@ -6,6 +6,6 @@ The src/algo.py implements the Minimax algorithm with alpha-beta pruning for the
 
 Minimax is the most time-intense part of the app. It's time complexity with optimal pruning alpha-beta is $O(b^{(d/2)})$, where $b = {36 \cdot 4 \cdot 2}$ and $d = 3$. Additionaly, a time complexity of evaluation process is $O(n)$.
 
-The evaluation function uses a quite aggressive defence tactic. Without the defence the algorithm can lose the game very quickly, if the user gets a row of four symbols in very beginning. This is due to a shallow recursive depth. If needed, some indeterminism can be applied by shuffling the list <code>seq</code> in generate_legal_moves function.
+The evaluation function uses a quite aggressive defence tactic. Without the defence the algorithm can lose the game very quickly, if the user gets a row of four symbols in very beginning. This is due to a shallow recursive depth. If needed, some indeterminism can be applied by shuffling the list <code>seq</code> in <code>generate_legal_moves</code> function.
 
 Credits for loading animation in the UI: https://stackoverflow.com/a/66558182
