@@ -99,6 +99,28 @@ class TestPentagoGame(unittest.TestCase):
         best_move = minimax(self.board, depth=0, max_depth=2, maximizingPlayer=True)
         assert best_move[1] == 0 # Draw condition
 
+    def test_minimax_other_draw_ai_turn(self):
+        self.board.state = [[1, 1, 0, 1, 1, 2],
+                            [1, 1, 2, 2, 1, 1],
+                            [2, 0, 1, 1, 2, 1],
+                            [1, 2, 2, 1, 1, 2],
+                            [2, 1, 2, 2, 2, 1],
+                            [1, 1, 1, 2, 2, 1]]
+        
+        best_move = minimax(self.board, depth=0, max_depth=2, maximizingPlayer=True)
+        assert best_move[1] == 0 # Draw condition
+
+    def test_minimax_draw_dodged_ai_turn(self):
+        self.board.state = [[1, 1, 2, 1, 1, 2],
+                            [2, 1, 2, 2, 1, 1],
+                            [2, 0, 1, 1, 2, 1],
+                            [1, 2, 2, 1, 1, 0],
+                            [2, 1, 2, 2, 2, 1],
+                            [1, 1, 1, 2, 2, 1]]
+        
+        best_move = minimax(self.board, depth=0, max_depth=2, maximizingPlayer=True)
+        assert best_move[1] == 10025 # AI wins
+
     def test_minimax_user_first(self):
         self.board.state = [[0, 0, 0, 0, 0, 0],
                             [0, 0, 0, 0, 0, 0],
