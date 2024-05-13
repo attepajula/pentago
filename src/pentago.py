@@ -56,10 +56,10 @@ def your_turn():
         list: A list containing the chosen row (0-5), column (0-5), quadrant (0-3), and direction (1 for clockwise, -1 for counterclockwise).
     """
     # Your turn
-    row = int(input("Choose row (1-6): ")) - 1
-    col = int(input("Choose column (1-6): ")) - 1
-    quadrant = int(input("Choose quarter (1-4): ")) - 1
-    directionInput = input("Choose direction (CW or CCW): ").upper()
+    row = int(input("Choose a row (1-6): ")) - 1
+    col = int(input("Choose a column (1-6): ")) - 1
+    quadrant = int(input("Choose a quarter (1-4): ")) - 1
+    directionInput = input("Choose a direction (CW or CCW): ").upper()
     if directionInput == "CW":
         direction = 1
     elif directionInput == "CCW":
@@ -99,7 +99,7 @@ def play():
                     sys.exit()
 
         if current_player == 2:
-            print("Machine makes a move:")
+            print("The machine makes a move:")
             loader = Loader("Making a move...", "").start()
             best_move = minimax(board, depth=0, max_depth=2, maximizingPlayer=True)[0]
             if best_move:
